@@ -1,0 +1,11 @@
+﻿.idea
+.vs
+packages
+
+RealTimeChart.Data/bin
+RealTimeChart.Data/obj
+
+RealTimeChart.Web/bin
+RealTimeChart.Web/obj
+
+RealTimeCharts.Web.csproj.user

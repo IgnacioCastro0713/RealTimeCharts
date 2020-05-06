@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p>
+        <a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a>
+    </p>
+</div>
+
+    <table style="width: 100%">
+        <tr>
+            <td style="width: 50%; text-align: center">
+                <canvas id="canvasForLineChart" height="200" width="400">Chart is Loading...</canvas>
+
+            </td>
+            <td style="width: 50%; text-align: center">
+                <canvas id="canvasForPieChart" height="200" width="400">Chart is Loading...</canvas>
+            </td>
+        </tr>
+    </table>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/signalr")
+    @Scripts.Render("/signalr/hubs")
+    <script>     
+        
+        $(function () {      
+        
+            //Create the Hub    
+            var chartHub = $.connection.chartHub;    
+                
+        
+            //Call InitChartData     
+            $.connection.hub.start().done(function () {                
+                chartHub.server.initChartData();    
+                    
+            });    
+        
+            //Call to Update LineChart from Server    
+            chartHub.client.updateChart = function (line_data, pie_data) {    
+                UpdateLineChart(line_data);  //Call the LineChart Update method    
+                UpdatePieChart(pie_data);     //Call the PieChart Update method    
+            };    
+        
+              
+        });    
+    </script>
+
+    <script type="text/javascript">    
+       ////////////////////////////////////////////////////////////////////////////////////////////////////////    
+       //Line Chart JSON Config (Line Chart Has fixed 1 data series here)    
+       var lineChartData = {    
+           labels: ["January", "February", "March", "April", "May", "June", "July"],    
+           datasets: [    
+            {                       
+                borderColor: "#3e95cd",   
+                data: [0]    
+            }    
+           ]    
+    
+       }       
+       
+       //Pie Chart JSON Config (Pie Chart Has fixed 3 Values/Slices here)    
+       var pieChartData = { 
+           labels: ["East", "West", "North","South"],
+           datasets: [{
+               backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+               data: [24,67,73,44,33]
+           }]
+       }
+           
+       function UpdateLineChart(data) {    
+               //Set data returned from Server    
+                lineChartData.datasets[0].backgroundColor = data.colorString;    
+                lineChartData.datasets[0].data = data.lineChartData;    
+                //Update the Pie Chart    
+                var canvasForLineChart = document.getElementById("canvasForLineChart");    
+                var context2DLine = canvasForLineChart.getContext("2d");    
+                new Chart(context2DLine, {
+                    type: 'line',
+                    data: lineChartData
+                });    
+            }    
+        
+       function UpdatePieChart(data) {    
+           pieChartData.datasets[0].data = data.value;
+           var canvasForPieChart = document.getElementById("canvasForPieChart");    
+           var context2DPie = canvasForPieChart.getContext("2d");    
+           new Chart(context2DPie, {
+               type: 'pie',
+               data: pieChartData
+           });    
+    
+           }    
+        
+             
+        
+    </script>
+}
