@@ -18,9 +18,9 @@ namespace RealTimeCharts.Web.services
         //Timer Class    
         private Timer _timer;
         private volatile bool _sendingChartData = false;
-        private readonly object _chartUpateLock = new object();
-        readonly LineChart _lineChart = new LineChart();
-        readonly PieChart _pieChart = new PieChart();
+        private readonly object _chartUpdateLock = new object();
+        private readonly LineChart _lineChart = new LineChart();
+        private readonly PieChart _pieChart = new PieChart();
 
         private ChartDataUpdate()
         {
@@ -38,7 +38,7 @@ namespace RealTimeCharts.Web.services
                 return;
             }
 
-            lock (_chartUpateLock)
+            lock (_chartUpdateLock)
             {
                 if (!_sendingChartData)
                 {
