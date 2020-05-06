@@ -2,10 +2,10 @@
 .vs
 packages
 
-RealTimeChart.Data/bin
-RealTimeChart.Data/obj
+RealTimeCharts.Data/bin
+RealTimeCharts.Data/obj
 
-RealTimeChart.Web/bin
-RealTimeChart.Web/obj
+RealTimeCharts.Web/bin
+RealTimeCharts.Web/obj
 
 RealTimeCharts.Web.csproj.user
